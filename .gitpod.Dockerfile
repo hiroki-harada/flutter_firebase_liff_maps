@@ -1,7 +1,7 @@
 FROM gitpod/workspace-full-vnc
 SHELL ["/bin/bash", "-c"]
 ENV ANDROID_HOME=$HOME/androidsdk \
-    FLUTTER_VERSION=3.0.2-stable \
+    FLUTTER_VERSION=3.10.2-stable \
     QTWEBENGINE_DISABLE_SANDBOX=1
 ENV PATH="$HOME/flutter/bin:$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH"
 
@@ -19,7 +19,7 @@ RUN install-packages openjdk-17-jdk -y \
 #     && _gc_path="$(command -v google-chrome)" \
 #     && rm "$_gc_path" && printf '%s\n' '#!/usr/bin/env bash' \
 #                                         'chromium --start-fullscreen "$@"' > "$_gc_path" \
-#     && chmod +x "$_gc_path" 
+#     && chmod +x "$_gc_path"
 
 # Insall flutter and dependencies
 USER gitpod
@@ -31,6 +31,7 @@ RUN wget -q "https://storage.googleapis.com/flutter_infra_release/releases/stabl
     && mkdir -p $ANDROID_HOME/cmdline-tools/latest \
     && mv $ANDROID_HOME/cmdline-tools/{bin,lib} $ANDROID_HOME/cmdline-tools/latest \
     && yes | sdkmanager "platform-tools" "build-tools;31.0.0" "platforms;android-31" \
+    && flutter upgrade \
     && flutter precache && for _plat in web linux-desktop; do flutter config --enable-${_plat}; done \
     && flutter config --android-sdk $ANDROID_HOME \
     && yes | flutter doctor --android-licenses \
